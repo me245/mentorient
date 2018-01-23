@@ -1,14 +1,12 @@
-﻿using System;
+﻿using mentorient.Models.Accounting;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using mentorient.Models.Accounting;
 
 namespace mentorient.Models
 {
-    public class Tenant
+    public class Tenant : IDataModel<int>
     {
         public int Id { get; set; }
 
@@ -45,11 +43,14 @@ namespace mentorient.Models
         [DisplayName("State")]
         [Required(ErrorMessage = "State required")]
         public string State { get; set; }
+
         public string Country { get; set; }
 
-        public virtual ICollection<Entry>  Entries { get; set; }
-        = new List<Entry>();
+        public int? RepeatingPaymentId { get; set; }
 
-        
+        public virtual RepeatingPayment RepeatingPayment { get; set; }
+
+        public virtual ICollection<Entry> Entries { get; set; }
+        = new List<Entry>();
     }
 }

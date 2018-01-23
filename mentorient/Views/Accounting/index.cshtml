@@ -1,4 +1,4 @@
-@model IEnumerable<mentorient.Models.Accounting.Entry>
+@model IEnumerable<Tuple<mentorient.Models.Accounting.Entry, string>>
 
 @{
     ViewData["Title"] = "Index";
@@ -27,12 +27,12 @@
     @foreach (var entry in Model)
     {
         <tr>
-            <td>@entry.TenantName</td>
-            <td>@entry.DateDue.ToShortDateString()</td>
-            <td>@entry.DatePaid.ToShortDateString()</td>
-            <td>@entry.AmountDue</td>
-            <td>@entry.AmountPaid</td>
-            <td>@entry.AmountRemaining</td>
+            <td>@entry.Item2</td>
+            <td>@entry.Item1.DateDue.ToShortDateString()</td>
+            <td>@entry.Item1.DatePaid.ToShortDateString()</td>
+            <td>@entry.Item1.AmountDue</td>
+            <td>@entry.Item1.AmountPaid</td>
+            <td>@(entry.Item1.AmountDue - entry.Item1.AmountPaid)</td>
         </tr>
                     
     }

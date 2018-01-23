@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mime;
 using mentorient.Data;
@@ -29,8 +31,17 @@ namespace mentorient.Controllers
             var entries = _context.Users.Include(usr => usr.AccountingEntries)
                 .Single(usr => usr.Id == userId)
                 .AccountingEntries;
+            List<Tuple<Entry, string>> values = new List<Tuple<Entry, string>>();
 
-            return View(entries);
+            foreach(Entry entry in entries)
+            {
+                var tenant = _context.Tenants.Single(ten => ten.Id == entry.TenantId);
+                string name = $"{tenant.FirstName} {tenant.LastName}";
+                values.Add(Tuple.Create(entry, name));
+                
+            }
+
+            return View(values);
         }
 
         public IActionResult Create()
@@ -56,8 +67,6 @@ namespace mentorient.Controllers
             var userId = _userManager.GetUserId(User);
             var tenantId = accountingEntry.TenantId;
             var tenant = _context.Tenants.SingleOrDefault(t => t.Id == tenantId);
-            var tenantName = tenant.FirstName + " " + tenant.LastName;
-            accountingEntry.TenantName = tenantName;
 
             _context.Users.Single(usr => usr.Id == userId).AccountingEntries.Add(accountingEntry);
 
